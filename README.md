@@ -38,7 +38,7 @@ Capture only one target network's traffic:
 airodump-ng —channel <channel> —bssid <bssid> —write <file_name> <interface> 
 ```
 The moment when the surrounding networks are scanned below:
-![airodump-scan](./screenshots/1aa522a9-033a-4300-b1dc-633b7c044aee.png)
+![airodump-scan](scan.png)
 
 ---
 
