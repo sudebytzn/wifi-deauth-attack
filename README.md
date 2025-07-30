@@ -52,7 +52,7 @@ airodump-ng --channel 9 --bssid  <bssid> --write airodumptest wlan0mon
 ```
 
 The moment the WPA handshake caught on:
-![handshake-capture](./screenshots/7187fb75-42c7-483b-bb05-196a3b31e324.png)
+![handshake-capture](handshake.png)
 
 ---
 
