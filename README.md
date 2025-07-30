@@ -35,8 +35,7 @@ airodump-ng wlan0mon
  Focus on One Network
 Capture only one target network's traffic:
 ```bash
-airodump-ng —channel <channel> —bssid <bssid> —write
-<file_name> <interface> 
+airodump-ng —channel <channel> —bssid <bssid> —write <file_name> <interface> 
 ```
 The moment when the surrounding networks are scanned below:
 ![airodump-scan](./screenshots/1aa522a9-033a-4300-b1dc-633b7c044aee.png)
