@@ -6,8 +6,23 @@
 ##  Requirements:
 - Kali Linux
 - `aircrack-ng`  ( `airodump-ng`, `aireplay-ng`)
-
+- `monitor mode`  
 ---
+## Managed Mode
+This is the default mode for Wi-Fi devices. It allows you to connect to access points, send and receive your own traffic and it use internet and applications normally.
+## Monitor Mode
+This is a passive mode used in wireless security testing captures all nearby wireless packets, doesn’t connect to any access point and it useful for analyzing or attacking Wi-Fi networks.
+
+## Switching Between Modes (Linux)
+Use airmon-ng to toggle modes:
+```bash
+# Enable Monitor Mode
+airmon-ng start wlan0
+```
+```bash
+# Disable Monitor Mode (return to Managed)
+airmon-ng stop wlan0mon
+```
 
 ##  1. Ağların Taranması (airodump-ng)
 
