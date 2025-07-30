@@ -6,7 +6,7 @@
 ##  Requirements:
 - Kali Linux
 - `aircrack-ng`  ( `airodump-ng`, `aireplay-ng`)
-- `monitor mode`  
+-  `wifi card`  
 ---
 ## Managed Mode
 This is the default mode for Wi-Fi devices. It allows you to connect to access points, send and receive your own traffic and it use internet and applications normally.
@@ -24,60 +24,67 @@ airmon-ng start wlan0
 airmon-ng stop wlan0mon
 ```
 
-##  1. Ağların Taranması (airodump-ng)
+##  1. Scanning Networks (airodump-ng)
+## airodump-ng
+airodump-ng is a tool from the aircrack-ng suite used for: Capturing raw 802.11 wireless packets, scanning nearby Wi-Fi networks (APs), monitoring clients connected to those networks and capturing WPA/WPA2 handshakes. It’s essential for reconnaissance in wireless penetration testing.
 
-İlk adımda, `airodump-ng` aracı ile çevredeki kablosuz ağlar taranmıştır.
-
+ Scan All Nearby Networks
 ```bash
 airodump-ng wlan0mon
 ```
-
-Aşağıda çevredeki ağların tarandığı an:
+ Focus on One Network
+Capture only one target network's traffic:
+```bash
+airodump-ng —channel <channel> —bssid <bssid> —write
+<file_name> <interface> 
+```
+The moment when the surrounding networks are scanned below:
 ![airodump-scan](./screenshots/1aa522a9-033a-4300-b1dc-633b7c044aee.png)
 
 ---
 
-##  2. Hedef Ağın Seçilmesi
+##  2. Selecting the Target Network
 
-Hedef ağ olarak `FiberHGW_ZT94JH` (BSSID: `C8:98:28:3A:44:77`) seçilmiştir. Bu ağın kanal numarası `9`'dur.
-
-Aşağıdaki komut ile sadece bu ağı ve bağlı istemcileri izlemeye aldık:
+i did chose my own wifi as a target.
+We only put this network and its connected clients under monitoring with the following command:
 
 ```bash
-airodump-ng --channel 9 --bssid C8:98:28:3A:44:77 --write airodumptest wlan0mon
+airodump-ng --channel 9 --bssid  <bssid> --write airodumptest wlan0mon
 ```
 
-WPA handshake'in yakalandığı an:
+The moment the WPA handshake caught on:
 ![handshake-capture](./screenshots/7187fb75-42c7-483b-bb05-196a3b31e324.png)
 
 ---
 
-##  3. Deauthentication Saldırısı (aireplay-ng)
+##  3. Deauthentication Attack (aireplay-ng)
+## aireplay-ng
+aireplay-ng is a tool used for injecting packets into a wireless network.
+It's commonly used to perform Wi-Fi attacks such as: Deauthentication attacks (forcing clients to disconnect), fake authentication (pretend to be a client), 
+ARP request replay (generate traffic to speed up WEP cracking), Interactive packet injection. It’s most famous for sending deauth packets to capture WPA/WPA2 handshakes.
 
-Handshake yakalayabilmek için ağdan bağlı istemcilerin bağlantısının kesilmesi gerekir. `aireplay-ng` komutu ile bu gerçekleştirilmiştir:
-
+To capture the handshake, connected leaks must be disconnected from the network. The `aireplay-ng` script was implemented:
 ```bash
-aireplay-ng --deauth 10000 -a C8:98:28:3A:44:77 wlan0mon
+aireplay-ng --deauth 10 -a <BSSID> wlan0mon
 ```
+This command disables printers connected to the target network (Access Point). This allows the handshake packet to be captured during reconnections.
 
-Bu komut, hedef ağa (Access Point) bağlı olan istemcileri bağlantı dışı bırakır. Böylece tekrar bağlanmaları sırasında handshake paketi yakalanabilir.
-
-DeAuth saldırısının gönderildiği an:
+The moment the DeAuth attack was sent:
 ![deauth-attack](./screenshots/994e3d74-70c1-4fb8-bf66-ae10e3ac0edf.png)
 
 ---
 
-## Notlar
-- Bu tür saldırılar sadece **bağlantı kurulu cihazlar** varsa işe yarar.
-- `EAPOL` paketlerinin görünmesi, WPA handshake'in başarıyla alındığını gösterir.
-- WPA handshake verisi daha sonra `aircrack-ng` veya `hashcat` gibi araçlarla kırılmaya çalışılabilir (bu doküman dahilinde değil).
+## Notes
+- This type of attack only works if there are **connected devices**.
+- The appearance of `EAPOL` packets indicates that the WPA handshake was successfully received.
+- The WPA handshake data can then be attempted to be cracked using tools such as `aircrack-ng` or `hashcat`.
 
 ---
 
-## Öneriler
-- İşlemleri sanal makine veya fiziksel test ortamlarında yapın.
-- `airmon-ng check kill` ile arka plan servislerini kapatın.
-- Yalnızca **izinli ağlar** üzerinde çalışın.
+## Recommendations
+- Perform operations in virtual machines or physical test environments.
+- Turn off background services with `airmon-ng check kill`.
+- Only work on **allowed networks**.
 
 ---
 
