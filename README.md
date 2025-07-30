@@ -69,7 +69,7 @@ aireplay-ng --deauth 10 -a <BSSID> wlan0mon
 This command disables printers connected to the target network (Access Point). This allows the handshake packet to be captured during reconnections.
 
 The moment the DeAuth attack was sent:
-![deauth-attack](./screenshots/994e3d74-70c1-4fb8-bf66-ae10e3ac0edf.png)
+![deauth-attack](deauth-packet.png)
 
 ---
 
